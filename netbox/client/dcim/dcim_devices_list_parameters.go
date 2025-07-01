@@ -2926,7 +2926,6 @@ func (o *DcimDevicesListParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	}
 
 	if o.DeviceRole != nil {
-
 		// query param device_type
 		var qrDeviceRole string
 
