@@ -32,7 +32,7 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 
-	"github.com/netbox-community/go-netbox/netbox/models"
+	"github.com/HLerman/go-netbox/v3/netbox/models"
 )
 
 // DcimPowerOutletTemplatesListReader is a Reader for the DcimPowerOutletTemplatesList structure.

@@ -27,7 +27,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/netbox-community/go-netbox/netbox/models"
+	"github.com/HLerman/go-netbox/v3/netbox/models"
 )
 
 // IpamVlansReadReader is a Reader for the IpamVlansRead structure.
