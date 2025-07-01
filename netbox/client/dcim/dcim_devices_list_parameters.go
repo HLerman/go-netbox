@@ -170,6 +170,9 @@ type DcimDevicesListParams struct {
 	// DeviceType.
 	DeviceType *string
 
+	// DeviceRole.
+	DeviceRole *string
+
 	// DeviceTypen.
 	DeviceTypen *string
 
@@ -950,6 +953,17 @@ func (o *DcimDevicesListParams) WithDeviceBays(deviceBays *string) *DcimDevicesL
 // SetDeviceBays adds the deviceBays to the dcim devices list params
 func (o *DcimDevicesListParams) SetDeviceBays(deviceBays *string) {
 	o.DeviceBays = deviceBays
+}
+
+// WithDeviceRole adds the deviceRole to the dcim devices list params
+func (o *DcimDevicesListParams) WithDeviceRole(deviceRole *string) *DcimDevicesListParams {
+	o.SetDeviceRole(deviceRole)
+	return o
+}
+
+// SetDeviceRole adds the deviceRole to the dcim devices list params
+func (o *DcimDevicesListParams) SetDeviceRole(deviceRole *string) {
+	o.DeviceRole = deviceRole
 }
 
 // WithDeviceType adds the deviceType to the dcim devices list params
@@ -2906,6 +2920,23 @@ func (o *DcimDevicesListParams) WriteToRequest(r runtime.ClientRequest, reg strf
 		if qDeviceBays != "" {
 
 			if err := r.SetQueryParam("device_bays", qDeviceBays); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.DeviceRole != nil {
+
+		// query param device_type
+		var qrDeviceRole string
+
+		if o.DeviceRole != nil {
+			qrDeviceRole = *o.DeviceRole
+		}
+		qDeviceRole := qrDeviceRole
+		if qDeviceRole != "" {
+
+			if err := r.SetQueryParam("device_role", qDeviceRole); err != nil {
 				return err
 			}
 		}
