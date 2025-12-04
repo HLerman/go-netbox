@@ -252,7 +252,7 @@ type IpamServicesListParams struct {
 	Q *string
 
 	// Tag.
-	Tag *string
+	Tag *[]string
 
 	// Tagn.
 	Tagn *string
@@ -928,13 +928,13 @@ func (o *IpamServicesListParams) SetQ(q *string) {
 }
 
 // WithTag adds the tag to the ipam services list params
-func (o *IpamServicesListParams) WithTag(tag *string) *IpamServicesListParams {
+func (o *IpamServicesListParams) WithTag(tag *[]string) *IpamServicesListParams {
 	o.SetTag(tag)
 	return o
 }
 
 // SetTag adds the tag to the ipam services list params
-func (o *IpamServicesListParams) SetTag(tag *string) {
+func (o *IpamServicesListParams) SetTag(tag *[]string) {
 	o.Tag = tag
 }
 
@@ -1939,15 +1939,15 @@ func (o *IpamServicesListParams) WriteToRequest(r runtime.ClientRequest, reg str
 	if o.Tag != nil {
 
 		// query param tag
-		var qrTag string
+		var qrTag []string
 
 		if o.Tag != nil {
 			qrTag = *o.Tag
 		}
 		qTag := qrTag
-		if qTag != "" {
+		if len(qTag) > 0 {
 
-			if err := r.SetQueryParam("tag", qTag); err != nil {
+			if err := r.SetQueryParam("tag", qTag...); err != nil {
 				return err
 			}
 		}
