@@ -22,7 +22,10 @@ package virtualization
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/go-openapi/errors"
@@ -388,6 +391,9 @@ type VirtualizationVirtualMachinesListParams struct {
 
 	// Statusn.
 	Statusn *string
+
+	// Custom Fields
+	CustomField *map[string]interface{}
 
 	// Tag.
 	Tag *string
@@ -1601,6 +1607,17 @@ func (o *VirtualizationVirtualMachinesListParams) SetStatusn(statusn *string) {
 	o.Statusn = statusn
 }
 
+// WithCustomFields
+func (o *VirtualizationVirtualMachinesListParams) WithCustomField(customFields *map[string]interface{}) *VirtualizationVirtualMachinesListParams {
+	o.SetCustomField(customFields)
+	return o
+}
+
+// SetCustomFields gets a reference to the given map[string]interface{} and assigns it to the CustomFields field.
+func (o *VirtualizationVirtualMachinesListParams) SetCustomField(v *map[string]interface{}) {
+	o.CustomField = v
+}
+
 // WithTag adds the tag to the virtualization virtual machines list params
 func (o *VirtualizationVirtualMachinesListParams) WithTag(tag *string) *VirtualizationVirtualMachinesListParams {
 	o.SetTag(tag)
@@ -1775,6 +1792,50 @@ func (o *VirtualizationVirtualMachinesListParams) WithVcpusn(vcpusn *string) *Vi
 // SetVcpusn adds the vcpusN to the virtualization virtual machines list params
 func (o *VirtualizationVirtualMachinesListParams) SetVcpusn(vcpusn *string) {
 	o.Vcpusn = vcpusn
+}
+
+func customFieldToString(v interface{}) (string, error) {
+	switch t := v.(type) {
+
+	case string:
+		return t, nil
+
+	case int:
+		return strconv.Itoa(t), nil
+	case int8, int16, int32, int64:
+		return fmt.Sprintf("%d", t), nil
+
+	case uint, uint8, uint16, uint32, uint64:
+		return fmt.Sprintf("%d", t), nil
+
+	case float32:
+		return strconv.FormatFloat(float64(t), 'f', -1, 32), nil
+	case float64:
+		return strconv.FormatFloat(t, 'f', -1, 64), nil
+
+	case bool:
+		return strconv.FormatBool(t), nil
+
+	case time.Time:
+		return t.Format(time.RFC3339), nil
+
+	case *time.Time:
+		if t == nil {
+			return "", nil
+		}
+		return t.Format(time.RFC3339), nil
+
+	case url.URL:
+		return t.String(), nil
+	case *url.URL:
+		if t == nil {
+			return "", nil
+		}
+		return t.String(), nil
+
+	default:
+		return "", fmt.Errorf("unsupported customField type: %T", v)
+	}
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -3498,6 +3559,27 @@ func (o *VirtualizationVirtualMachinesListParams) WriteToRequest(r runtime.Clien
 
 			if err := r.SetQueryParam("status__n", qStatusn); err != nil {
 				return err
+			}
+		}
+	}
+
+	if o.CustomField != nil {
+
+		// query param customField
+		var qrCustomField map[string]interface{}
+
+		qrCustomField = *o.CustomField
+
+		if len(qrCustomField) > 0 {
+			for k, v := range qrCustomField {
+				strVal, err := customFieldToString(v)
+				if err != nil {
+					return fmt.Errorf("customField %q: %w", k, err)
+				}
+
+				if err := r.SetQueryParam("cf_"+k, strVal); err != nil {
+					return err
+				}
 			}
 		}
 	}
