@@ -171,7 +171,7 @@ type DcimDevicesListParams struct {
 	DeviceBays *string
 
 	// DeviceType.
-	DeviceType *string
+	DeviceType *[]string
 
 	// DeviceRole.
 	DeviceRole *string
@@ -973,13 +973,13 @@ func (o *DcimDevicesListParams) SetDeviceRole(deviceRole *string) {
 }
 
 // WithDeviceType adds the deviceType to the dcim devices list params
-func (o *DcimDevicesListParams) WithDeviceType(deviceType *string) *DcimDevicesListParams {
+func (o *DcimDevicesListParams) WithDeviceType(deviceType *[]string) *DcimDevicesListParams {
 	o.SetDeviceType(deviceType)
 	return o
 }
 
 // SetDeviceType adds the deviceType to the dcim devices list params
-func (o *DcimDevicesListParams) SetDeviceType(deviceType *string) {
+func (o *DcimDevicesListParams) SetDeviceType(deviceType *[]string) {
 	o.DeviceType = deviceType
 }
 
@@ -3005,15 +3005,15 @@ func (o *DcimDevicesListParams) WriteToRequest(r runtime.ClientRequest, reg strf
 	if o.DeviceType != nil {
 
 		// query param device_type
-		var qrDeviceType string
+		var qrDeviceType []string
 
 		if o.DeviceType != nil {
 			qrDeviceType = *o.DeviceType
 		}
 		qDeviceType := qrDeviceType
-		if qDeviceType != "" {
+		if len(qDeviceType) > 0 {
 
-			if err := r.SetQueryParam("device_type", qDeviceType); err != nil {
+			if err := r.SetQueryParam("device_type", qDeviceType...); err != nil {
 				return err
 			}
 		}
